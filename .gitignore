@@ -30,3 +30,4 @@
 *.exe
 *.out
 *.app
+Launcher/examples/example_glfw_opengl3/Debug/
