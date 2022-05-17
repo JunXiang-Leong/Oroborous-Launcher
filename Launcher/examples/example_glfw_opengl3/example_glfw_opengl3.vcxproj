@@ -168,7 +168,6 @@
     <ClCompile Include="..\..\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\..\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Launcher\Launcher.cpp" />
-    <ClCompile Include="Launcher\ProjectAction.cpp" />
     <ClCompile Include="Launcher\ProjectTracker.cpp" />
     <ClCompile Include="Utilities\FileSystemUtills.cpp" />
     <ClCompile Include="Utilities\ImGuiManager.cpp" />
@@ -183,7 +182,6 @@
     <ClInclude Include="..\..\backends\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="..\..\imgui_stdlib.h" />
     <ClInclude Include="Launcher\Launcher.h" />
-    <ClInclude Include="Launcher\ProjectAction.h" />
     <ClInclude Include="Launcher\ProjectTracker.h" />
     <ClInclude Include="Utilities\FileSystemUtills.h" />
     <ClInclude Include="Utilities\ImGuiManager.h" />

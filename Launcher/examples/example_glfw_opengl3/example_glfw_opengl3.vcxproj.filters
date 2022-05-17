@@ -49,9 +49,6 @@
     <ClCompile Include="Launcher\ProjectTracker.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="Launcher\ProjectAction.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\imconfig.h">
@@ -78,7 +75,6 @@
     <ClInclude Include="..\..\imgui_stdlib.h" />
     <ClInclude Include="Launcher\Launcher.h" />
     <ClInclude Include="Launcher\ProjectTracker.h" />
-    <ClInclude Include="Launcher\ProjectAction.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.txt" />

@@ -49,12 +49,12 @@ bool FileSystemUtils::DeleteItem(const std::string& filename)
 	return true;
 }
 
-void FileSystemUtils::DuplicateItem(const std::filesystem::path& filename, const std::filesystem::path & targetfolder)
+std::string FileSystemUtils::DuplicateItem(const std::filesystem::path& filename, const std::filesystem::path & targetfolder, const std::string& name_file)
 {
 	if (std::filesystem::exists(filename) == false)
-		return;
+		return "";
 	std::string parent_path = targetfolder.string();
-	std::string name = filename.filename().string();
+	std::string name = name_file.empty() ? filename.filename().string(): name_file;
 	std::string ext = filename.extension().string();
 	int counter = 1;
 
@@ -74,6 +74,7 @@ void FileSystemUtils::DuplicateItem(const std::filesystem::path& filename, const
 	{
 		std::filesystem::copy(filename, copytarget);
 	}
+	return copytarget;
 }
 
 size_t FileSystemUtils::CountFiles_Recursively(const std::filesystem::path& filename)

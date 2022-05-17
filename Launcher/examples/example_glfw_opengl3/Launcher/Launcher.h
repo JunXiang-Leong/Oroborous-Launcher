@@ -1,6 +1,5 @@
 #pragma once
 #include "ProjectTracker.h"
-#include "ProjectAction.h"
 class Launcher
 {
 public:
@@ -8,5 +7,5 @@ public:
 	void InitAllUI();
 private:
 	ProjectTracker m_tracker;
-	ProjectAction m_action;
+
 };

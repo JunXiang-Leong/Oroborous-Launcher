@@ -8,5 +8,4 @@ Launcher::Launcher()
 void Launcher::InitAllUI()
 {
 	ImGuiManager::Create("ProjectTracker", true, ImGuiWindowFlags_::ImGuiWindowFlags_NoDecoration, [this]() {m_tracker.Show(); });
-	ImGuiManager::Create("ProjectAction", true, ImGuiWindowFlags_::ImGuiWindowFlags_None, [this]() {m_action.Show(); });
 }
