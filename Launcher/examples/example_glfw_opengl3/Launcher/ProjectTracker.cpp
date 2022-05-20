@@ -10,9 +10,63 @@
 #include <shobjidl_core.h>
 
 #include <Utilities/FileSystemUtills.h>
+
+#include <rapidjson/filereadstream.h>
+#include <rapidjson/filewritestream.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/prettywriter.h>
+
+#include <cstdio>
+#include <fstream>
+#include <streambuf>
 ProjectTracker::ProjectTracker()
 {
-	//read file 
+	char temp[1024];
+	GetModuleFileNameA(NULL, temp, 1024);
+	m_exepath = std::filesystem::path(temp).parent_path();
+	//read file
+	FILE* fp = fopen((m_exepath.string() + DATA_FILE_PROJECT_PATH).c_str(), "rb"); // non-Windows use "w"
+	//pratically nothing since the first item is alr an object
+	if (fp == nullptr)
+	{
+		m_document.SetObject();
+		return;
+	}
+	constexpr size_t sizebuffer = 65500;
+	char* readBuffer  = new char[sizebuffer];
+
+	rapidjson::FileReadStream is(fp, readBuffer, sizebuffer);
+	m_document.ParseStream(is);
+
+	fclose(fp);
+	delete[] readBuffer;
+
+	if (m_document.IsObject() == false || m_document.IsArray())//the first item should be an object
+	{
+		m_document.SetObject();
+		return;
+	}
+
+	for (auto iter = m_document.MemberBegin(); iter != m_document.MemberEnd(); ++iter)
+	{
+		m_project_directories.emplace(std::string(iter->name.GetString()) ,std::filesystem::path(iter->value.GetString()));
+	}
+}
+
+ProjectTracker::~ProjectTracker()
+{
+	FILE* fp = fopen((m_exepath.string() + DATA_FILE_PROJECT_PATH).c_str(), "wb"); // non-Windows use "w"
+
+	constexpr size_t sizebuffer = 65500;
+	char* writeBuffer = new char[sizebuffer];
+	rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+	
+	rapidjson::PrettyWriter<rapidjson::FileWriteStream> writer(os);
+	writer.SetFormatOptions(rapidjson::PrettyFormatOptions::kFormatDefault);
+	m_document.Accept(writer);
+
+	fclose(fp);
+	delete[] writeBuffer;
 }
 
 void ProjectTracker::Show()
@@ -40,14 +94,14 @@ void ProjectTracker::Tracker()
 	for (auto& dir : m_project_directories)
 	{
 		ImGui::TableNextColumn();
-		ImGui::PushID(dir.string().c_str());
+		ImGui::PushID(dir.first.c_str());
 		ImVec2 cursor_pos = ImGui::GetCursorPos();
 		//name
 		ImGui::PushFont(&tempfont);
-		ImGui::Text("Name :%s", dir.stem().string().c_str());
+		ImGui::Text("Name :%s", dir.first.c_str());
 		ImGui::PopFont();
 		//path
-		ImGui::Text("Path :%s", dir.string().c_str());
+		ImGui::Text("Path :%s", dir.second.string().c_str());
 
 		ImGui::SetCursorPos(cursor_pos);
 		if (ImGui::Selectable("##projecticon", false, 0, {width ,height}))
@@ -80,7 +134,7 @@ void ProjectTracker::Actions()
 	ImGui::Dummy({ content_region.x * 0.25f,0 }); ImGui::SameLine();
 	if (ImGui::Button("Add Project", button_size))
 	{
-
+		FileDialogue_Generic(L"Config File(*.json)", L"*.json", [this](const std::filesystem::path& p ) {this->AddProject(p); });
 	}
 	ImGui::Dummy(button_size);
 	ImGui::Dummy({ content_region.x * 0.25f,0 }); ImGui::SameLine();
@@ -91,16 +145,42 @@ void ProjectTracker::Actions()
 	ImGui::EndGroup();
 }
 
-void ProjectTracker::CreateProject(std::filesystem::path p)
+void ProjectTracker::CreateProject(const std::filesystem::path& p)
 {
 	if (std::filesystem::exists(p) == false)
 		return;//failed
-	char temp[1024];
-	GetModuleFileNameA(NULL, temp, 1024);
-	std::filesystem::path exepath = temp;
-	auto name = FileSystemUtils::DuplicateItem(exepath.parent_path().string() + "/DoNotTouch", p, m_ProjectFileName);
-	if(name.empty() == false)
-		m_project_directories.push_back(name);
+
+	auto name = FileSystemUtils::DuplicateItem(m_exepath.string() + DATA_FILE_PATH_TEMPLATE , p, m_ProjectFileName);
+	if (name.empty() == false)
+	{
+		RegisterItem(name);
+	}
+}
+
+void ProjectTracker::AddProject(const std::filesystem::path& p)
+{
+	if (std::filesystem::exists(p) == false)
+		return;//failed
+	if (p.stem().string() != DATA_FILE_CONFIGFILE_NAME)
+		return;
+
+	RegisterItem(p.parent_path());//move 1 file out, i dont want the config path
+}
+
+void ProjectTracker::RegisterItem(const std::filesystem::path& p)
+{
+	std::string project_title = p.stem().string();
+	std::string pathname = p.string();
+	m_project_directories.emplace(project_title, pathname);
+
+
+	rapidjson::Value projectname;
+	projectname.SetString(project_title.c_str(), static_cast<rapidjson::SizeType>(project_title.size()), m_document.GetAllocator());
+
+	rapidjson::Value projectpath;
+	projectpath.SetString(pathname.c_str(), static_cast<rapidjson::SizeType>(pathname.size()), m_document.GetAllocator());
+
+	m_document.AddMember(projectname, projectpath, m_document.GetAllocator());
 }
 
 bool ProjectTracker::FileDialogue()
@@ -136,6 +216,53 @@ bool ProjectTracker::FileDialogue()
 					CreateProject(p);
 					pItem->Release();
 					activated = true;
+				}
+			}
+			pFileOpen->Release();
+		}
+		CoUninitialize();
+	}
+	return activated;
+}
+
+bool ProjectTracker::FileDialogue_Generic(const wchar_t* description, const wchar_t* extension,std::function<void(const std::filesystem::path&)> callback)
+{
+	bool activated = false;
+	std::filesystem::path p;//this folder path
+	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED |
+		COINIT_DISABLE_OLE1DDE);
+	if (SUCCEEDED(hr))
+	{
+		IFileOpenDialog* pFileOpen;
+
+		// Create the FileOpenDialog object.
+		hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL,
+			IID_IFileOpenDialog, reinterpret_cast<void**>(&pFileOpen));
+		//pFileOpen->SetOptions(FOS_PICKFOLDERS);
+		const COMDLG_FILTERSPEC filter[] = {
+			{description, extension}
+		};
+		pFileOpen->SetFileTypes(1, filter);
+		if (SUCCEEDED(hr))
+		{
+			// Show the Open dialog box.
+			hr = pFileOpen->Show(NULL);
+			// Get the file name from the dialog box.
+			if (SUCCEEDED(hr))
+			{
+				IShellItem* pItem;
+				hr = pFileOpen->GetResult(&pItem);
+				if (SUCCEEDED(hr))
+				{
+					activated = true;
+
+					PWSTR pszFilePath;
+					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+					p = pszFilePath;//this path is e.g (/root/config.exe)
+					if (callback)
+						callback(p);
+					pItem->Release();
+					
 				}
 			}
 			pFileOpen->Release();
