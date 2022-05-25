@@ -1,0 +1,10 @@
+{
+    "Project Settings": {
+        "ProjectFolderPath": "/Project/",
+        "StartScene": "/Project\\Scenes\\Scene.scn",
+        "ScriptCoreDLL": "/Project/Library/ScriptCore.dll",
+        "ScriptModulePath": "/Project/Scripting.csproj",
+        "ScriptBuildPath": "/Project/bin/Debug/"
+    },
+    "Scenes": {}
+}

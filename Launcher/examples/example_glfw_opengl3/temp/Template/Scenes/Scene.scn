@@ -1,0 +1,64 @@
+{
+    "9220150953012205772": [
+        "GameObject",
+        {
+            "Active": true,
+            "Name": "new gameObject",
+            "UUID": 9220150953012205772,
+            "Layer": 255,
+            "Active In Hierarchy": true
+        },
+        "Transform3D",
+        {
+            "Component Active": true,
+            "Position": [0.0, 0.0, 0.0],
+            "Rotation Angle": 0.0,
+            "Scaling": [1.0, 1.0, 1.0],
+            "Parent UUID": 0,
+            "List of Child UUIDs": []
+        },
+        "Editor Component",
+        {
+            "Is Prefab": false,
+            "Prefab Reference": 0,
+            "Head Reference": 0,
+            "Object Icons": 10,
+            "color test": []
+        },
+        "Particle Emitter",
+        {
+            "Particle properties": {
+                "Local simulation": false,
+                "Colour percents": [0.0, 0.0],
+                "Colours": [[1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0]],
+                "Speed percents": [0.0, 1.0],
+                "Speeds": [1.0, 1.0],
+                "Rotation percents": [0.0, 1.0],
+                "Rotations": [0.0, 0.0],
+                "Direction percents": [0.0, 1.0],
+                "Directions": [[0.0, 1.0, 0.0], [0.0, 1.0, 0.0]],
+                "Size percents": [0.0, 1.0],
+                "Sizes": [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
+            },
+            "Particle renderer": {
+                "Rendering Layer": 1,
+                "Texture": 2,
+                "Emission": 2
+            },
+            "Particle shape": {
+                "Shape": 0,
+                "Size": 1.0,
+                "Angle": 30.0
+            },
+            "Max particles": 1000,
+            "Particle rate": 10.0,
+            "Max lifetime": 5.0,
+            "Duration": 5.0,
+            "Looping": true,
+            "Prewarm": false,
+            "Prewarm Baked": false,
+            "Bake": false,
+            "RO_BakedData": []
+        },
+        "Scripting", {}]
+}

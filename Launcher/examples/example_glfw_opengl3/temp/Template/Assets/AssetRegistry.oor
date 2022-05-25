@@ -1,0 +1,16 @@
+{
+    "Assets": {
+        "5403477189503901254": {
+            "Type": "AudioCatalogue",
+            "Filepath": "Audio\\AudioCatalogue.ooac",
+            "AssetData": "",
+            "Name": "AudioCatalogue"
+        },
+        "12710200272298895370": {
+            "Type": "Texture",
+            "Filepath": "Images\\orignalTutorialTower.png",
+            "AssetData": "Images\\orignalTutorialTower.png.meta",
+            "Name": "orignalTutorialTower"
+        }
+    }
+}

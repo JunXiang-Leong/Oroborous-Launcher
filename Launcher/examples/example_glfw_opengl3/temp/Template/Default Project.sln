@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripting", "Scripting.csproj", "{}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|OpenGL = Debug|OpenGL
+		Production|OpenGL = Production|OpenGL
+		Release|OpenGL = Release|OpenGL
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+	{}.Debug|OpenGL.ActiveCfg = Debug OpenGL|x64
+	{}.Debug|OpenGL.Build.0 = Debug OpenGL|x64
+	{}.Production|OpenGL.ActiveCfg = Production OpenGL|x64
+	{}.Production|OpenGL.Build.0 = Production OpenGL|x64
+	{}.Release|OpenGL.ActiveCfg = Release OpenGL|x64
+	{}.Release|OpenGL.Build.0 = Release OpenGL|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+	HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	SolutionGuid = {}
+	EndGlobalSection
+EndGlobal
