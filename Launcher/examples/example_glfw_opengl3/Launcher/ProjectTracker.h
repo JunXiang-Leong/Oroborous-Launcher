@@ -29,7 +29,13 @@ private://actions
 	bool FileDialogue();
 	bool FileDialogue_Generic(const wchar_t* description, const wchar_t* extension, std::function<void(const std::filesystem::path&)> callback = 0);
 private:
-	std::map<std::string , std::filesystem::path> m_project_directories;
+	struct ProjectFileInfo
+	{
+		std::string dateAdded;
+		std::string lastOpened;
+		std::string version;
+	};
+	std::map<std::filesystem::path, ProjectFileInfo> m_project_directories;
 	std::filesystem::path m_exepath;
 	std::string m_ProjectFileName = "Project";
 

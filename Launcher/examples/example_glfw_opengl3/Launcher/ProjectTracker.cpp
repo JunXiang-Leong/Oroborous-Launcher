@@ -16,6 +16,7 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/prettywriter.h>
 
+#include <ctime>
 #include <cstdio>
 #include <fstream>
 #include <streambuf>
@@ -49,7 +50,12 @@ ProjectTracker::ProjectTracker()
 
 	for (auto iter = m_document.MemberBegin(); iter != m_document.MemberEnd(); ++iter)
 	{
-		m_project_directories.emplace(std::string(iter->name.GetString()) ,std::filesystem::path(iter->value.GetString()));
+		auto member = iter->value.GetObj().MemberBegin();
+		ProjectFileInfo info;
+		info.dateAdded = member->value.GetString(); member++;
+		info.lastOpened = member->value.GetString(); member++;
+		info.version = member->value.GetString();
+		m_project_directories.emplace(std::filesystem::path(iter->name.GetString()) ,info);
 	}
 }
 
@@ -98,10 +104,13 @@ void ProjectTracker::Tracker()
 		ImVec2 cursor_pos = ImGui::GetCursorPos();
 		//name
 		ImGui::PushFont(&tempfont);
-		ImGui::Text("Name :%s", dir.first.c_str());
+		ImGui::Text("Name :%s", dir.first.stem().string().c_str());
 		ImGui::PopFont();
 		//path
-		ImGui::Text("Path :%s", dir.second.string().c_str());
+		ImGui::Text("Path :%s", dir.first.string().c_str());
+		ImGui::Text("Date Added:%s" , dir.second.dateAdded.c_str());
+		ImGui::Text("Last Opened:%s", dir.second.lastOpened.c_str());
+		ImGui::Text("Editor Version:%s", dir.second.version.c_str());
 
 		ImGui::SetCursorPos(cursor_pos);
 		if (ImGui::Selectable("##projecticon", false, 0, {width ,height}))
@@ -169,18 +178,48 @@ void ProjectTracker::AddProject(const std::filesystem::path& p)
 
 void ProjectTracker::RegisterItem(const std::filesystem::path& p)
 {
-	std::string project_title = p.stem().string();
+	std::string time_created;
+	constexpr const char*  default_ver = "00.00.00";
+	{
+		time_t rawtime;
+		struct tm* timeinfo;
+		char currentTimeBuffer[64];
+
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+
+		strftime(currentTimeBuffer, sizeof(currentTimeBuffer), "%d-%m-%Y %H:%M:%S", timeinfo);
+		time_created = (currentTimeBuffer);
+	}
+
 	std::string pathname = p.string();
-	m_project_directories.emplace(project_title, pathname);
+	ProjectFileInfo info;
+	info.dateAdded = time_created;
+	info.lastOpened = time_created;
+	info.version = default_ver;
+	m_project_directories.emplace(pathname, info);
 
+	//rapidjson data///////////////////////////
+	rapidjson::Value projectInfo;
+	projectInfo.SetObject();
 
-	rapidjson::Value projectname;
-	projectname.SetString(project_title.c_str(), static_cast<rapidjson::SizeType>(project_title.size()), m_document.GetAllocator());
+	rapidjson::Value date_added;
+	date_added.SetString(time_created.c_str(), static_cast<rapidjson::SizeType>(time_created.size()), m_document.GetAllocator());
+
+	rapidjson::Value last_opened;
+	last_opened.SetString(time_created.c_str(), static_cast<rapidjson::SizeType>(time_created.size()), m_document.GetAllocator());
+
+	rapidjson::Value version_editor;
+	version_editor.SetString(default_ver, static_cast<rapidjson::SizeType>(sizeof(default_ver)), m_document.GetAllocator());//hard coded
+
+	projectInfo.AddMember("Data Added", date_added,m_document.GetAllocator());
+	projectInfo.AddMember("Last Opened", last_opened, m_document.GetAllocator());
+	projectInfo.AddMember("Version", version_editor, m_document.GetAllocator());
 
 	rapidjson::Value projectpath;
 	projectpath.SetString(pathname.c_str(), static_cast<rapidjson::SizeType>(pathname.size()), m_document.GetAllocator());
 
-	m_document.AddMember(projectname, projectpath, m_document.GetAllocator());
+	m_document.AddMember(projectpath,projectInfo , m_document.GetAllocator());
 }
 
 bool ProjectTracker::FileDialogue()
