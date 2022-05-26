@@ -105,6 +105,8 @@ void ProjectTracker::Tracker()
 		//name
 		ImGui::PushFont(&tempfont);
 		ImGui::Text("Name :%s", dir.first.stem().string().c_str());
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.75f, 0.2f, 0.2f, 1), "%s", std::filesystem::exists(dir.first) ? "" : "[Not Found]");
 		ImGui::PopFont();
 		//path
 		ImGui::Text("Path :%s", dir.first.string().c_str());
@@ -113,9 +115,21 @@ void ProjectTracker::Tracker()
 		ImGui::Text("Editor Version:%s", dir.second.version.c_str());
 
 		ImGui::SetCursorPos(cursor_pos);
-		if (ImGui::Selectable("##projecticon", false, 0, {width ,height}))
+		if (ImGui::Selectable("##projecticon", false, ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowItemOverlap, {width ,height}))
 		{
+			//some open project code here
+		}
+		ImGui::Separator();
 
+		ImGui::SetCursorPos(cursor_pos);
+		ImGui::Dummy({ width-120, 0 });
+		ImGui::SameLine();
+		if (ImGui::Button("Remove"))
+		{
+			m_document.RemoveMember(dir.first.string().c_str());
+			m_project_directories.erase(dir.first);
+			ImGui::PopID();
+			break;
 		}
 		ImGui::PopID();
 	}
@@ -145,12 +159,7 @@ void ProjectTracker::Actions()
 	{
 		FileDialogue_Generic(L"Config File(*.json)", L"*.json", [this](const std::filesystem::path& p ) {this->AddProject(p); });
 	}
-	ImGui::Dummy(button_size);
-	ImGui::Dummy({ content_region.x * 0.25f,0 }); ImGui::SameLine();
-	if (ImGui::Button("Remove Project", button_size))
-	{
-
-	}
+	
 	ImGui::EndGroup();
 }
 
