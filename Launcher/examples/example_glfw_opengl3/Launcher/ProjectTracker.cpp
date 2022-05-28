@@ -88,18 +88,26 @@ void ProjectTracker::Show()
 void ProjectTracker::Tracker()
 {
 	ImGui::BeginGroup();
-	std::string someText = "Test Text";
-	ImGui::InputText("Temp Test", &someText);
+	
+	ImGui::InputText("Filter", &m_search);
+	ImGui::Separator();
 
-	ImGui::BeginTable("Tracker table",1);
-	float width = ImGui::GetContentRegionAvail().x;
+	ImVec2 content_region = ImGui::GetContentRegionAvail();
+	ImGui::BeginChild("Trackers", { content_region.x , content_region.y * 0.9f },true);
+	ImGui::BeginTable("Tracker table", 1, 0);
+
 	constexpr float height = 100.0f;
 	//get copy of font
 	ImFont tempfont = *ImGui::GetFont();
 	tempfont.Scale *= 1.5f;
 	for (auto& dir : m_project_directories)
 	{
+		std::string temp = dir.first.string();
+		auto iter = std::search(temp.begin(), temp.end(), m_search.begin(), m_search.end(), [](char a, char b) {return std::toupper(a) == std::toupper(b); });
+		if (iter == temp.end())
+			continue;
 		ImGui::TableNextColumn();
+
 		ImGui::PushID(dir.first.c_str());
 		ImVec2 cursor_pos = ImGui::GetCursorPos();
 		//name
@@ -115,14 +123,14 @@ void ProjectTracker::Tracker()
 		ImGui::Text("Editor Version:%s", dir.second.version.c_str());
 
 		ImGui::SetCursorPos(cursor_pos);
-		if (ImGui::Selectable("##projecticon", false, ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowItemOverlap, {width ,height}))
+		if (ImGui::Selectable("##projecticon", false, ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowItemOverlap, { content_region.x ,height}))
 		{
 			//some open project code here
 		}
 		ImGui::Separator();
 
 		ImGui::SetCursorPos(cursor_pos);
-		ImGui::Dummy({ width-120, 0 });
+		ImGui::Dummy({ content_region.x-120, 0 });
 		ImGui::SameLine();
 		if (ImGui::Button("Remove"))
 		{
@@ -134,6 +142,8 @@ void ProjectTracker::Tracker()
 		ImGui::PopID();
 	}
 	ImGui::EndTable();
+	ImGui::EndChild();
+
 	ImGui::EndGroup();
 }
 
@@ -143,16 +153,20 @@ void ProjectTracker::Actions()
 	ImVec2 content_region = ImGui::GetContentRegionAvail();
 
 	ImVec2 button_size = { content_region.x * 0.5f , 100 };
-	if (ImGui::InputText("Project Name", &m_ProjectFileName))
-	{
 
-	}
+	ImGui::NewLine();
+	ImGui::Dummy({ content_region.x * 0.25f,0}); ImGui::SameLine();
 
-	ImGui::Dummy({ content_region.x * 0.25f,0 }); ImGui::SameLine();
+	ImGui::BeginGroup();
+	ImGui::PushItemWidth(button_size.x);
 	if (ImGui::Button("Create Project", button_size))
 	{
 		FileDialogue();
 	}
+	ImGui::InputText("##ProjectName", &m_ProjectFileName,ImGuiInputTextFlags_AutoSelectAll);
+	ImGui::PopItemWidth();
+	ImGui::EndGroup();
+
 	ImGui::Dummy(button_size);
 	ImGui::Dummy({ content_region.x * 0.25f,0 }); ImGui::SameLine();
 	if (ImGui::Button("Add Project", button_size))

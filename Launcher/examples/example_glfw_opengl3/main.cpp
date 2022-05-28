@@ -132,7 +132,7 @@ int main(int, char**)
 		ImGui::DockSpaceOverViewport(ImGui::GetWindowViewport(), ImGuiDockNodeFlags_PassthruCentralNode);
 		
 		ImGuiManager::UpdateAllUI();
-
+		// ImGui::ShowDemoWindow();
         // Rendering
         ImGui::Render();
         int display_w, display_h;

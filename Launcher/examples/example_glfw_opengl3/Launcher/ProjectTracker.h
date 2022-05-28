@@ -28,6 +28,9 @@ private://actions
 	void RegisterItem(const std::filesystem::path& p);
 	bool FileDialogue();
 	bool FileDialogue_Generic(const wchar_t* description, const wchar_t* extension, std::function<void(const std::filesystem::path&)> callback = 0);
+
+private:// non file related
+	std::string m_search = "";
 private:
 	struct ProjectFileInfo
 	{
