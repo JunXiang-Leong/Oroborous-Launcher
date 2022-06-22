@@ -1,8 +1,7 @@
 #include "ProjectTracker.h"
-#include "examples/example_glfw_opengl3/Utilities/ImGuiManager.h"
-
+#include "Utilities/ImGuiManager.h"
 #include <imgui.h>
-#include <imgui_stdlib.h>
+#include <misc/cpp/imgui_stdlib.h>
 #include <filesystem>
 
 #include <windows.h>

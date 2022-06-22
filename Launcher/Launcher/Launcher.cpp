@@ -1,5 +1,5 @@
 #include "Launcher.h"
-#include "examples/example_glfw_opengl3/Utilities/ImGuiManager.h"
+#include "Utilities/ImGuiManager.h"
 Launcher::Launcher()
 {
 	InitAllUI();
