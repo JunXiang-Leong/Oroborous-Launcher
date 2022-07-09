@@ -1,5 +1,5 @@
 #include "ProjectTracker.h"
-#include "Utilities/ImGuiManager.h"
+#include "Utilities/ImGuiManager_Launcher.h"
 #include <imgui.h>
 #include <misc/cpp/imgui_stdlib.h>
 #include <filesystem>
@@ -8,7 +8,7 @@
 #include <shellapi.h>
 #include <shobjidl_core.h>
 
-#include <Utilities/FileSystemUtills.h>
+#include <Utilities/FileSystemUtills_Launcher.h>
 
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/filewritestream.h>
@@ -181,7 +181,7 @@ void ProjectTracker::CreateProject(const std::filesystem::path& p)
 	if (std::filesystem::exists(p) == false)
 		return;//failed
 
-	auto name = FileSystemUtils::DuplicateItem(m_exepath.string() + DATA_FILE_PATH_TEMPLATE , p, m_ProjectFileName);
+	auto name = FileSystemUtils_Launcher::DuplicateItem(m_exepath.string() + DATA_FILE_PATH_TEMPLATE , p, m_ProjectFileName);
 	if (name.empty() == false)
 	{
 		RegisterItem(name);

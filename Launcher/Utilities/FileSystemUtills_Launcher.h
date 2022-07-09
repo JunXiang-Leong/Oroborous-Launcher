@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-class FileSystemUtils
+class FileSystemUtils_Launcher
 {
 public:
 	//please do a std::move for this

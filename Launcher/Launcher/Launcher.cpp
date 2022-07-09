@@ -1,5 +1,5 @@
 #include "Launcher.h"
-#include "Utilities/ImGuiManager.h"
+#include "Utilities/ImGuiManager_Launcher.h"
 Launcher::Launcher()
 {
 	InitAllUI();
@@ -7,5 +7,5 @@ Launcher::Launcher()
 
 void Launcher::InitAllUI()
 {
-	ImGuiManager::Create("ProjectTracker", true, ImGuiWindowFlags_::ImGuiWindowFlags_NoDecoration, [this]() {m_tracker.Show(); });
+	ImGuiManager_Launcher::Create("ProjectTracker", true, ImGuiWindowFlags_::ImGuiWindowFlags_NoDecoration, [this]() {m_tracker.Show(); });
 }

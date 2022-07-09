@@ -1,7 +1,7 @@
-#include "FileSystemUtills.h"
+#include "FileSystemUtills_Launcher.h"
 
 #include <fstream>//CreateItem()
-std::vector<std::filesystem::path> FileSystemUtils::ListOfFilesInDirectory(const std::string& path)
+std::vector<std::filesystem::path> FileSystemUtils_Launcher::ListOfFilesInDirectory(const std::string& path)
 {
 	std::vector<std::filesystem::path> files;
 
@@ -12,7 +12,7 @@ std::vector<std::filesystem::path> FileSystemUtils::ListOfFilesInDirectory(const
 	}
 	return files;
 }
-std::filesystem::path FileSystemUtils::CreateItem(const std::string& filename, const std::string& ext)
+std::filesystem::path FileSystemUtils_Launcher::CreateItem(const std::string& filename, const std::string& ext)
 {
 	std::string current = filename + ext;
 	int count = 0;
@@ -36,7 +36,7 @@ std::filesystem::path FileSystemUtils::CreateItem(const std::string& filename, c
 	return current;
 }
 
-bool FileSystemUtils::DeleteItem(const std::string& filename)
+bool FileSystemUtils_Launcher::DeleteItem(const std::string& filename)
 {
 	std::error_code ec;
 	std::filesystem::remove_all(filename, ec);
@@ -49,7 +49,7 @@ bool FileSystemUtils::DeleteItem(const std::string& filename)
 	return true;
 }
 
-std::string FileSystemUtils::DuplicateItem(const std::filesystem::path& filename, const std::filesystem::path & targetfolder, const std::string& name_file)
+std::string FileSystemUtils_Launcher::DuplicateItem(const std::filesystem::path& filename, const std::filesystem::path & targetfolder, const std::string& name_file)
 {
 	if (std::filesystem::exists(filename) == false)
 		return "";
@@ -77,7 +77,7 @@ std::string FileSystemUtils::DuplicateItem(const std::filesystem::path& filename
 	return copytarget;
 }
 
-size_t FileSystemUtils::CountFiles_Recursively(const std::filesystem::path& filename)
+size_t FileSystemUtils_Launcher::CountFiles_Recursively(const std::filesystem::path& filename)
 {
 	size_t counter = 0;
 	for (auto& file : std::filesystem::recursive_directory_iterator(filename))
@@ -87,7 +87,7 @@ size_t FileSystemUtils::CountFiles_Recursively(const std::filesystem::path& file
 	return counter;
 }
 
-size_t FileSystemUtils::CountFiles_NonRecursive(const std::filesystem::path& filename)
+size_t FileSystemUtils_Launcher::CountFiles_NonRecursive(const std::filesystem::path& filename)
 {
 	size_t counter = 0;
 	for (auto& file : std::filesystem::directory_iterator(filename))

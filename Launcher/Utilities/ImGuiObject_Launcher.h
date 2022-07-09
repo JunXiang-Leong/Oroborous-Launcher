@@ -5,10 +5,10 @@
 
 
 
-class ImGuiObject
+class ImGuiObject_Launcher
 {
 public:
-	ImGuiObject(const bool enable,const ImGuiWindowFlags_ flag,std::function<void()>fnc)
+	ImGuiObject_Launcher(const bool enable,const ImGuiWindowFlags_ flag,std::function<void()>fnc)
 		:m_enabled{ enable }, m_flags{ flag }, m_UIupdate{ fnc } {};
 	std::function<void()> m_UIupdate;
 	ImGuiWindowFlags_ m_flags;
