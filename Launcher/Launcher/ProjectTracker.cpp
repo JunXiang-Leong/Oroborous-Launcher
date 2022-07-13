@@ -25,7 +25,8 @@ ProjectTracker::ProjectTracker()
 	GetModuleFileNameA(NULL, temp, 1024);
 	m_exepath = std::filesystem::path(temp).parent_path();
 	//read file
-	FILE* fp = fopen((m_exepath.string() + DATA_FILE_PROJECT_PATH).c_str(), "rb"); // non-Windows use "w"
+	FILE* fp;
+	fopen_s(&fp, (m_exepath.string() + DATA_FILE_PROJECT_PATH).c_str(), "rb"); // non-Windows use "w"
 	//pratically nothing since the first item is alr an object
 	if (fp == nullptr)
 	{
@@ -60,7 +61,8 @@ ProjectTracker::ProjectTracker()
 
 ProjectTracker::~ProjectTracker()
 {
-	FILE* fp = fopen((m_exepath.string() + DATA_FILE_PROJECT_PATH).c_str(), "wb"); // non-Windows use "w"
+	FILE* fp;
+	fopen_s(&fp,(m_exepath.string() + DATA_FILE_PROJECT_PATH).c_str(), "wb"); // non-Windows use "w"
 
 	constexpr size_t sizebuffer = 65500;
 	char* writeBuffer = new char[sizebuffer];
@@ -70,7 +72,8 @@ ProjectTracker::~ProjectTracker()
 	writer.SetFormatOptions(rapidjson::PrettyFormatOptions::kFormatDefault);
 	m_document.Accept(writer);
 
-	fclose(fp);
+	if(fp)
+		fclose(fp);
 	delete[] writeBuffer;
 }
 
@@ -204,13 +207,13 @@ void ProjectTracker::RegisterItem(const std::filesystem::path& p)
 	constexpr const char*  default_ver = "00.00.00";
 	{
 		time_t rawtime;
-		struct tm* timeinfo;
+		struct tm timeinfo;
 		char currentTimeBuffer[64];
 
 		time(&rawtime);
-		timeinfo = localtime(&rawtime);
+		localtime_s(&timeinfo,&rawtime);
 
-		strftime(currentTimeBuffer, sizeof(currentTimeBuffer), "%d-%m-%Y %H:%M:%S", timeinfo);
+		strftime(currentTimeBuffer, sizeof(currentTimeBuffer), "%d-%m-%Y %H:%M:%S", &timeinfo);
 		time_created = (currentTimeBuffer);
 	}
 
