@@ -1,7 +1,7 @@
 #pragma once
-#include <imgui.h>
-#include <misc/cpp/imgui_stdlib.h>
-#include <imgui_internal.h>
+#include <imgui/imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
+#include <imgui/imgui_internal.h>
 #include <string>
 #include <functional>
 #include <unordered_map>

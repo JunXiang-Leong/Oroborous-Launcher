@@ -1,7 +1,7 @@
 #include "ProjectTracker.h"
 #include "Utilities/ImGuiManager_Launcher.h"
-#include <imgui.h>
-#include <misc/cpp/imgui_stdlib.h>
+#include <imgui/imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
 #include <filesystem>
 
 #include <windows.h>
