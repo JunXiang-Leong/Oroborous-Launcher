@@ -14,7 +14,7 @@
 class ProjectTracker
 {
 public:
-	ProjectTracker();
+	ProjectTracker(std::function <void(std::filesystem::path&)> selectProj);
 	~ProjectTracker();
 	void Show();
 
@@ -31,6 +31,7 @@ private://actions
 
 private:// non file related
 	std::string m_search = "";
+	std::function <void(std::filesystem::path&)> m_StartProject;
 private:
 	struct ProjectFileInfo
 	{

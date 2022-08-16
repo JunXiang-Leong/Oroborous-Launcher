@@ -3,7 +3,7 @@
 class Launcher
 {
 public:
-	Launcher();
+	Launcher(std::function <void(std::filesystem::path&)> selectProj);
 	void InitAllUI();
 private:
 	ProjectTracker m_tracker;

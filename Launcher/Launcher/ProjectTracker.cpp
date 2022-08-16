@@ -19,7 +19,9 @@
 #include <cstdio>
 #include <fstream>
 #include <streambuf>
-ProjectTracker::ProjectTracker()
+
+ProjectTracker::ProjectTracker(std::function <void(std::filesystem::path&)> selectProj)
+	:m_StartProject(selectProj)
 {
 	char temp[1024];
 	GetModuleFileNameA(NULL, temp, 1024);
@@ -128,6 +130,9 @@ void ProjectTracker::Tracker()
 		if (ImGui::Selectable("##projecticon", false, ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowItemOverlap, { content_region.x ,height}))
 		{
 			//some open project code here
+			std::filesystem::path p = dir.first.string() + "/Config.json";
+			
+			m_StartProject(p);
 		}
 		ImGui::Separator();
 

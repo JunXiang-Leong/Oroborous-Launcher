@@ -1,6 +1,7 @@
 #include "Launcher.h"
 #include "Utilities/ImGuiManager_Launcher.h"
-Launcher::Launcher()
+Launcher::Launcher(std::function <void(std::filesystem::path&)> selectProj)
+	:m_tracker(selectProj)
 {
 	InitAllUI();
 }
