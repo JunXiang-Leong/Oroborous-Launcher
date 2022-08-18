@@ -1,8 +1,0 @@
-D:\Ouroboros Ninecraft\bin\Debug-Editor-windows-x86_64\Editor\Project\bin\Debug\Scripting.dll
-D:\Ouroboros Ninecraft\bin\Debug-Editor-windows-x86_64\Editor\Project\bin\Debug\Scripting.pdb
-D:\Ouroboros Ninecraft\bin\Debug-Editor-windows-x86_64\Editor\Project\bin\Debug\ScriptCore.dll
-D:\Ouroboros Ninecraft\bin\Debug-Editor-windows-x86_64\Editor\Project\obj\x64\Debug OpenGL\Scripting.csproj.AssemblyReference.cache
-D:\Ouroboros Ninecraft\bin\Debug-Editor-windows-x86_64\Editor\Project\obj\x64\Debug OpenGL\Scripting.csproj.CoreCompileInputs.cache
-D:\Ouroboros Ninecraft\bin\Debug-Editor-windows-x86_64\Editor\Project\obj\x64\Debug OpenGL\Scripting.csproj.CopyComplete
-D:\Ouroboros Ninecraft\bin\Debug-Editor-windows-x86_64\Editor\Project\obj\x64\Debug OpenGL\Scripting.dll
-D:\Ouroboros Ninecraft\bin\Debug-Editor-windows-x86_64\Editor\Project\obj\x64\Debug OpenGL\Scripting.pdb
