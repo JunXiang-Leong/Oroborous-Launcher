@@ -107,6 +107,7 @@ void ProjectTracker::Tracker()
 	for (auto& dir : m_project_directories)
 	{
 		std::string temp = dir.first.string();
+		bool fileExist = std::filesystem::exists(dir.first);
 		auto iter = std::search(temp.begin(), temp.end(), m_search.begin(), m_search.end(), [](char a, char b) {return std::toupper(a) == std::toupper(b); });
 		if (iter == temp.end())
 			continue;
@@ -118,7 +119,7 @@ void ProjectTracker::Tracker()
 		ImGui::PushFont(&tempfont);
 		ImGui::Text("Name :%s", dir.first.stem().string().c_str());
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(0.75f, 0.2f, 0.2f, 1), "%s", std::filesystem::exists(dir.first) ? "" : "[Not Found]");
+		ImGui::TextColored(ImVec4(0.75f, 0.2f, 0.2f, 1), "%s", fileExist ? "" : "[Not Found]");
 		ImGui::PopFont();
 		//path
 		ImGui::Text("Path :%s", dir.first.string().c_str());
@@ -127,7 +128,13 @@ void ProjectTracker::Tracker()
 		ImGui::Text("Editor Version:%s", dir.second.version.c_str());
 
 		ImGui::SetCursorPos(cursor_pos);
-		if (ImGui::Selectable("##projecticon", false, ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowItemOverlap, { content_region.x ,height}))
+		ImGuiSelectableFlags_ flags = ImGuiSelectableFlags_::ImGuiSelectableFlags_AllowItemOverlap;
+		if (fileExist == false)
+		{
+			flags = static_cast<ImGuiSelectableFlags_>(flags|ImGuiSelectableFlags_Disabled);
+		}
+
+		if (ImGui::Selectable("##projecticon", false, flags, { content_region.x ,height}))
 		{
 			//some open project code here
 			std::filesystem::path p = dir.first.string() + "/Config.json";
