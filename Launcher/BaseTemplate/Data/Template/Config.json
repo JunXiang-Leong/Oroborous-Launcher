@@ -1,7 +1,7 @@
 {
     "Project Settings": {
         "ProjectFolderPath": "/",
-        "StartScene": "/Scenes/Scene.scn",
+        "StartScene": "Scene.scn",
 		"SceneFolder":"/Scenes/",
 		"PrefabFolder" : "/Prefabs/",
         "ScriptCoreDLL": "/Library/ScriptCore.dll",
