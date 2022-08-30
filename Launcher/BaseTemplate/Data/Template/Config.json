@@ -3,7 +3,7 @@
         "ProjectFolderPath": "/",
         "StartScene": "/Scenes/Scene.scn",
 		"SceneFolder":"/Scenes/",
-		"PrefabFolder" : "/Prefabs/"
+		"PrefabFolder" : "/Prefabs/",
         "ScriptCoreDLL": "/Library/ScriptCore.dll",
         "ScriptModulePath": "/Scripting.csproj",
         "ScriptBuildPath": "/bin/Debug/"
